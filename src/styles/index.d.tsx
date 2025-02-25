@@ -1,3 +1,5 @@
+
+
 type Login = {
     email?: string;
     password?: string;
@@ -7,3 +9,5 @@ type ChechEmailPassword = {
     password:string,
 }
 type event = { target: { value: string; }; }
+
+
