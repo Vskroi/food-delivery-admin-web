@@ -1,5 +1,6 @@
 "use client";
 
+import { AdminPage } from "@/_features/admin/adminPgae";
 import { LoginFeatures } from "@/_features/Login/Login-Featuts";
 import { Navigation } from "@/components/AdminWeb/Navigation/Navigation";
 
@@ -13,7 +14,7 @@ const [step , nextStep] = useState(false)
     return (
       <>
         <div>
-          {!step ?   <Navigation></Navigation> : <Login nextStep={nextStep}></Login>  }
+          {!step ?   <AdminPage></AdminPage>: <Login nextStep={nextStep}></Login>  }
        
         </div>
       </>

@@ -1,4 +1,4 @@
-import { MoveLeft } from "lucide-react";
+import { ChevronLeft, MoveLeft } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { useEffect, useState } from "react";
@@ -66,10 +66,10 @@ export const Login = ({ nextStep }: LoginProps) => {
   }
 
   return (
-    <div className="w-full flex">
+    <div className="w-full flex w-full justify-center items-center">
       <div className="w-[416px] h-[376px] flex-col justify-center items-start gap-6 inline-flex mt-[326px] ml-[90px]">
         <Button>
-          <MoveLeft />
+          <ChevronLeft/>
         </Button>
         <h1 className="text-zinc-950 text-2xl font-semibold leading-loose">
           Log in
@@ -98,7 +98,10 @@ export const Login = ({ nextStep }: LoginProps) => {
           Let's Go
         </Button>
       </div>
-      <div className="w-[856px] h-[904px] bg-black mt-10"></div>
+      <div className="w-[856px] h-[904px] relative mt-10">
+        <img className="rounded-3xl w-[856px] h-[904px] " src="Frame1321316047.png" />
+      </div>
+
     </div>
   );
 };
