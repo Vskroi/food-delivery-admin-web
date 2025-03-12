@@ -1,8 +1,15 @@
+import { Container } from "@/components/AdminWeb/container"
 import { Navigation } from "@/components/AdminWeb/Navigation/Navigation"
+
 
 export const AdminPage = () => {
     
     return (
-        <Navigation ></Navigation>
+        <>
+        <div className="flex">
+        <Navigation></Navigation>
+        <Container></Container>
+        </div>
+        </>
     )
 }

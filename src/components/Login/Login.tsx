@@ -1,4 +1,4 @@
-import { ChevronLeft, MoveLeft } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { useEffect, useState } from "react";
@@ -10,20 +10,24 @@ interface LoginProps {
 }
 
 export const Login = ({ nextStep }: LoginProps) => {
-  const [loginValue, setLoginValue] = useState<Login>({});
+  const [loginValue, setLoginValue] = useState<{
+    email: string;
+    password: string;
+  }>({
+    email: "",
+    password: "",
+  });
   const [loading, setLoading] = useState(false);
-  const [admin, setAdmin] = useState<Login>({});
   const [error, setError] = useState<string | null>(null);
 
   const getData = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("http://localhost:4000/users");
-      const adminData = response.data[0];
-      setAdmin(adminData);
+      const response = await axios.get("http://localhost:4000/user/login");
+      console.log("Data fetched:", response);
       setLoading(false);
     } catch (err) {
-      console.error(err);
+      console.error("Error fetching data:", err);
       setLoading(false);
     }
   };
@@ -32,32 +36,51 @@ export const Login = ({ nextStep }: LoginProps) => {
     getData();
   }, []);
 
-  const onSubmit = async () => {
-    const userSchema = object({
-      email: string().email().required(),
-      password: string().min(6).required(), 
-    });
+  const userSchema = object({
+    email: string().email().required("Email is required"),
+    password: string()
+      .min(6, "Password must be at least 6 characters long")
+      .required("Password is required"),
+  });
 
+  const handleSubmit = async () => {
+    setLoading(true);
+    setError(null);
+  
     try {
-      await userSchema.validate(loginValue);
+  
+      console.log("Sending request with values:", loginValue);
+  
+      const response = await axios.post(
+        "http://localhost:4000/user/login", 
+        loginValue,
+        {
+          headers: {
+            "Content-Type": "application/json", 
+          },
+        }
+      );
+  
+      if (response.data.success) {
+        console.log("Login successful:", response.data.message);
 
-      if (loginValue.email === admin.email && loginValue.password === admin.password) {
-        setError(null);
-        console.log("Login successful");
-        nextStep(true); 
-        setError("Invalid email or password");
-        console.log("Invalid credentials");
+      } else {
+        setError(response.data.message);
       }
     } catch (err) {
-      setError("Please check your inputs");
+      console.error("Login error:", err);
+      setError("An error occurred during login.");
+    } finally {
+      setLoading(false);
     }
   };
+  
 
-  const onEmailValueChange = (e: event) => {
+  const onEmailValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoginValue((prev) => ({ ...prev, email: e.target.value }));
   };
 
-  const onPasswordValueChange = (e: event) => {
+  const onPasswordValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoginValue((prev) => ({ ...prev, password: e.target.value }));
   };
 
@@ -69,7 +92,7 @@ export const Login = ({ nextStep }: LoginProps) => {
     <div className="w-full flex w-full justify-center items-center">
       <div className="w-[416px] h-[376px] flex-col justify-center items-start gap-6 inline-flex mt-[326px] ml-[90px]">
         <Button>
-          <ChevronLeft/>
+          <ChevronLeft />
         </Button>
         <h1 className="text-zinc-950 text-2xl font-semibold leading-loose">
           Log in
@@ -94,14 +117,16 @@ export const Login = ({ nextStep }: LoginProps) => {
         <a href="#" className="underline">
           Forgot password?
         </a>
-        <Button onClick={onSubmit} className="w-[336px]">
+        <Button onClick={handleSubmit} className="w-[336px]">
           Let's Go
         </Button>
       </div>
       <div className="w-[856px] h-[904px] relative mt-10">
-        <img className="rounded-3xl w-[856px] h-[904px] " src="Frame1321316047.png" />
+        <img
+          className="rounded-3xl w-[856px] h-[904px]"
+          src="Frame1321316047.png"
+        />
       </div>
-
     </div>
   );
 };
