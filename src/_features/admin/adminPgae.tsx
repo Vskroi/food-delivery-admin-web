@@ -1,15 +1,16 @@
-import { Container } from "@/components/AdminWeb/container"
-import { Navigation } from "@/components/AdminWeb/Navigation/Navigation"
+import { Container } from "@/components/AdminWeb/container";
+import { Navigation } from "@/components/AdminWeb/Navigation/Navigation";
+import { useState } from "react";
+
 
 
 export const AdminPage = () => {
-    
-    return (
-        <>
-        <div className="flex">
-        <Navigation></Navigation>
-        <Container></Container>
-        </div>
-        </>
-    )
-}
+  const [selected, setMenuSelected] = useState<AdminPageState>("FoodMenu");
+
+  return (
+    <div className="flex">
+      <Navigation setMenuSelected={setMenuSelected} />
+      <Container selected={selected} />
+    </div>
+  );
+};

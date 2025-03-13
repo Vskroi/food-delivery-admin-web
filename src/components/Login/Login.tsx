@@ -2,7 +2,7 @@ import { ChevronLeft } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { useEffect, useState } from "react";
-import axios from "axios";
+
 import { object, string } from "yup";
 
 interface LoginProps {
@@ -20,22 +20,6 @@ export const Login = ({ nextStep }: LoginProps) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const getData = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get("http://localhost:4000/user/login");
-      console.log("Data fetched:", response);
-      setLoading(false);
-    } catch (err) {
-      console.error("Error fetching data:", err);
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getData();
-  }, []);
-
   const userSchema = object({
     email: string().email().required("Email is required"),
     password: string()
@@ -46,26 +30,30 @@ export const Login = ({ nextStep }: LoginProps) => {
   const handleSubmit = async () => {
     setLoading(true);
     setError(null);
-  
+
     try {
-  
       console.log("Sending request with values:", loginValue);
-  
-      const response = await axios.post(
-        "http://localhost:4000/user/login", 
-        loginValue,
+
+      const response = await fetch(
+        "http://localhost:4000/user/login",
         {
+          method: "POST",
           headers: {
-            "Content-Type": "application/json", 
+            "Content-Type": "application/json",
           },
+          body: JSON.stringify(loginValue),
         }
       );
-  
-      if (response.data.success) {
-        console.log("Login successful:", response.data.message);
 
+      const responseData = await response.json(); 
+
+      console.log(responseData);
+
+      if (responseData.success) {
+        console.log("Login successful:", responseData.message);
+        nextStep(true); 
       } else {
-        setError(response.data.message);
+        setError(responseData.message);
       }
     } catch (err) {
       console.error("Login error:", err);
@@ -74,13 +62,12 @@ export const Login = ({ nextStep }: LoginProps) => {
       setLoading(false);
     }
   };
-  
 
-  const onEmailValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onEmailValueChange = (e: event) => {
     setLoginValue((prev) => ({ ...prev, email: e.target.value }));
   };
 
-  const onPasswordValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onPasswordValueChange = (e : event) => {
     setLoginValue((prev) => ({ ...prev, password: e.target.value }));
   };
 
