@@ -9,13 +9,18 @@ type ChechEmailPassword = {
 type event = { target: { value: string } };
 type setMenuSelected = { setMenuSelected: { setMenuSelected: string } };
 type ContainerProps = {
-  selected: string ;
+  selected: string;
 };
-type AdminPageState = string ;
+type AdminPageState = string;
 
 type NavigationProps = {
   setMenuSelected: (menu: string) => void;
 };
 type Category = {
-  cateryName: string;
+  cateryName: string | null;
+  hide?: boolean;
+_id:string | null
 };
+type dish = {
+  hide?: boolean;
+}

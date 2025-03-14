@@ -2,7 +2,7 @@
 
 import { AdminPage } from "@/_features/admin/adminPgae";
 
-import { Navigation } from "@/components/AdminWeb/Navigation/Navigation";
+import { Navigation } from "@/components/Navigation/Navigation";
 
 import { Login } from "@/components/Login/Login";
 import axios from "axios";
