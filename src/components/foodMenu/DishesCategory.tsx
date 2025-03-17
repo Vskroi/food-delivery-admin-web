@@ -5,25 +5,36 @@ import axios from "axios";
 import { Plus, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
 export const DishesCategory = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
   const [addCategory, setAddCategory] = useState<Category>({
-    hide: false,
+
     cateryName: null,
     _id: null,
   });
   const [selectedCategory, setSelectedCategory] =
     useState<string>("All Dishes");
-  console.log(addCategory);
+
 
   const category = async () => {
     try {
       const response = await axios.get("http://localhost:4000/categories");
       const data = response.data.data;
       setCategories(data);
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -42,12 +53,7 @@ export const DishesCategory = () => {
       console.log(error);
     }
   };
-  const toggleAddCategory = () => {
-    setAddCategory((prevState) => ({
-      ...prevState,
-      hide: !prevState.hide,
-    }));
-  };
+
 
   const onCagegoryChange = (e: event) => {
     setAddCategory((prev) => ({ ...prev, cateryName: e.target.value }));
@@ -75,65 +81,57 @@ export const DishesCategory = () => {
             </h4>
             <div className="flex flex-wrap w-[1100px] gap-3">
               {categories.map((category) => (
-                <>
+                <div
+                  key={category._id}
+                  className="inline-flex justify-start items-center gap-3 flex-wrap content-center overflow-hidden"
+                >
                   <div
-                    key={category._id}
-                    className="inline-flex justify-start items-center gap-3 flex-wrap content-center overflow-hidden"
-                  >
-                    <div
-                      
-                      className={`h-9 px-4 py-2 bg-background-bg-background rounded-full border-[1px] flex justify-start items-center gap-2
+                    className={`h-9 px-4 py-2 bg-background-bg-background rounded-full border-[1px] flex justify-start items-center gap-2
         ${
           selectedCategory === category.cateryName!
             ? "border-red-600"
             : "border-black"
         }`}
-                      onClick={() => setSelected(category.cateryName!)}
-                    >
-                      <p>{category.cateryName}</p>
-                    </div>
-                  </div>
-                </>
-              ))}
-              <div
-                onClick={toggleAddCategory}
-                className="flex justify-center items-center w-[36px] h-[36px] bg-[#ef4444] rounded-full"
-              >
-                <Plus stroke="white" />
-              </div>
-              {addCategory.hide ? (
-                <div className="w-[460px] bg-white rounded-md">
-                  <div className="flex">
-                    <p className=" justify-start text-lg font-semibold ">
-                      Add new category
-                    </p>
-                    <button
-                      onClick={toggleAddCategory}
-                      className="w-7 h-7 px-2 py-2 bg-zinc-100 rounded-full inline-flex justify-center items-center gap-2"
-                    >
-                      <X></X>
-                    </button>
-                  </div>
-                  <div>
-                    <p className="text-sm">Category name</p>
-
-                    <Input
-                      onChange={onCagegoryChange}
-                      type="text"
-                      placeholder="tyoe category name..."
-                      className="w-60"
-                    ></Input>
-                  </div>
-                  <Button
-                    onClick={AddNewCategory}
-                    className="justify-start h-[35px] w-[120px] rounded-sm bg-black text-sm font-medium text-white"
+                    onClick={() => setSelected(category.cateryName!)}
                   >
-                    Add category
-                  </Button>
+                    <p>{category.cateryName}</p>
+                  </div>
                 </div>
-              ) : (
-                <></>
-              )}
+              ))}
+
+              <AlertDialog>
+                <AlertDialogTrigger>
+                  {" "}
+                  <div className="flex justify-center items-center w-[36px] h-[36px] bg-[#ef4444] rounded-full">
+                    <Plus stroke="white" />
+                  </div>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle className="justify-start text-lg font-semibold ">
+
+                   
+                        Add new category
+                    
+                    </AlertDialogTitle>
+                    <AlertDialogDescription className="text-black">
+                      Category name
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <Input
+                    onChange={onCagegoryChange}
+                    type="text"
+                    placeholder="type category name..."
+                    className="w-60"
+                  ></Input>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={AddNewCategory}>
+                      Add category
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
           </div>
         </div>

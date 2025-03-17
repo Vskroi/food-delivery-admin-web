@@ -1,4 +1,4 @@
-import { DishesCategory } from "./dishes-category";
+import { DishesCategory } from "./DishesCategory";
 import { ProductList } from "./product-list"
 export const FoodMenu = () => {
   return (
