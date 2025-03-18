@@ -22,13 +22,11 @@ export const DishesCategory = () => {
   const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
   const [addCategory, setAddCategory] = useState<Category>({
-
-    cateryName: null,
-    _id: null,
+    cateryName: "",
+    _id: "",
   });
   const [selectedCategory, setSelectedCategory] =
-    useState<string>("All Dishes");
-
+    useState<string | undefined | null>("All Dishes");
 
   const category = async () => {
     try {
@@ -54,15 +52,14 @@ export const DishesCategory = () => {
     }
   };
 
-
   const onCagegoryChange = (e: event) => {
     setAddCategory((prev) => ({ ...prev, cateryName: e.target.value }));
   };
 
   const setSelected = (menu: string) => {
     const params = new URLSearchParams(searchParams.toString());
-
-    setSelectedCategory(menu);
+    const selecetedCategory = categories.find((name) => name._id === menu)
+    setSelectedCategory(selecetedCategory?.cateryName);
     params.set("cateryName", menu);
     router.push(`?${params.toString()}`);
   };
@@ -80,6 +77,17 @@ export const DishesCategory = () => {
               Dishes category
             </h4>
             <div className="flex flex-wrap w-[1100px] gap-3">
+              <div className="inline-flex justify-start items-center gap-3 flex-wrap content-center overflow-hidden">
+                <div
+                  className={`h-9 px-4 py-2 bg-background-bg-background rounded-full border-[1px] flex justify-start items-center gap-2
+        ${
+          selectedCategory === "All Dishes"! ? "border-red-600" : "border-black"
+        }`}
+                  onClick={() => setSelected("All Dishes")}
+                >
+                  <p>All Dishes</p>
+                </div>
+              </div>
               {categories.map((category) => (
                 <div
                   key={category._id}
@@ -92,7 +100,7 @@ export const DishesCategory = () => {
             ? "border-red-600"
             : "border-black"
         }`}
-                    onClick={() => setSelected(category.cateryName!)}
+                    onClick={() => setSelected(category._id!)}
                   >
                     <p>{category.cateryName}</p>
                   </div>
@@ -109,10 +117,7 @@ export const DishesCategory = () => {
                 <AlertDialogContent>
                   <AlertDialogHeader>
                     <AlertDialogTitle className="justify-start text-lg font-semibold ">
-
-                   
-                        Add new category
-                    
+                      Add new category
                     </AlertDialogTitle>
                     <AlertDialogDescription className="text-black">
                       Category name

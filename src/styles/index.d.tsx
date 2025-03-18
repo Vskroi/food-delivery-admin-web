@@ -22,25 +22,36 @@ type NavigationProps = {
   setMenuSelected: (menu: string) => void;
 };
 
+
+
+
+
+
+
+///
 type Category = {
-  cateryName: string | null;
-  hide?: boolean;
-  _id: string | null;
+  _id: string;
+  cateryName: string;
+};
+
+type Food = {
+  _id: string;
+  foodName: string;
+  price: string;
+  ingerdiets: string;
+  image: string;
+  category: string;
 };
 
 type Dish = {
   foodName: string | null;
-  price: number | null;
+  price: string | null;
   ingerdiets: string | null;
   image: string | null;
-  category?: string;
+  category: string | undefined;
 };
-type Food = {
-  _id: string;
-  category: string;
-  foodName: string;
-  image: string;
-  ingerdiets: string;
-  price: number;
-  __v: number;
+
+type Cat = {
+  name: string;
+  _id: string | null;
 };
