@@ -52,6 +52,6 @@ type Dish = {
 };
 
 type Cat = {
-  name: string;
+  name?: string;
   _id: string | null;
 };

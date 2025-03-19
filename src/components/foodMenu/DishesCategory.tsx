@@ -25,8 +25,9 @@ export const DishesCategory = () => {
     cateryName: "",
     _id: "",
   });
-  const [selectedCategory, setSelectedCategory] =
-    useState<string | undefined | null>("All Dishes");
+  const [selectedCategory, setSelectedCategory] = useState<
+    string | undefined | null
+  >("AllDishes");
 
   const category = async () => {
     try {
@@ -58,8 +59,14 @@ export const DishesCategory = () => {
 
   const setSelected = (menu: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    const selecetedCategory = categories.find((name) => name._id === menu)
-    setSelectedCategory(selecetedCategory?.cateryName);
+    if(menu === "AllDishes"){
+      setSelectedCategory("AllDishes");
+    }else{
+      const selecetedCategory = categories.find((name) => name._id === menu);
+      setSelectedCategory(selecetedCategory?.cateryName);
+    }
+    
+   
     params.set("cateryName", menu);
     router.push(`?${params.toString()}`);
   };
@@ -81,9 +88,9 @@ export const DishesCategory = () => {
                 <div
                   className={`h-9 px-4 py-2 bg-background-bg-background rounded-full border-[1px] flex justify-start items-center gap-2
         ${
-          selectedCategory === "All Dishes"! ? "border-red-600" : "border-black"
+          selectedCategory === "AllDishes" ? "border-red-600" : "border-black"
         }`}
-                  onClick={() => setSelected("All Dishes")}
+                  onClick={() => setSelected("AllDishes")}
                 >
                   <p>All Dishes</p>
                 </div>
