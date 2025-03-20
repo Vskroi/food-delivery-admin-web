@@ -59,14 +59,13 @@ export const DishesCategory = () => {
 
   const setSelected = (menu: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    if(menu === "AllDishes"){
+    if (menu === "AllDishes") {
       setSelectedCategory("AllDishes");
-    }else{
+    } else {
       const selecetedCategory = categories.find((name) => name._id === menu);
       setSelectedCategory(selecetedCategory?.cateryName);
     }
-    
-   
+
     params.set("cateryName", menu);
     router.push(`?${params.toString()}`);
   };
