@@ -22,8 +22,8 @@ export const DishesCategory = () => {
   const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
   const [addCategory, setAddCategory] = useState<Category>({
-    cateryName: "",
-    _id: "",
+    cateryName: null,
+    _id: null,
   });
   const [selectedCategory, setSelectedCategory] = useState<
     string | undefined | null

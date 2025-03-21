@@ -1,4 +1,19 @@
+import axios from "axios"
+import { useEffect } from "react"
+
 export const Orders = () => {
+
+  const allUsers = async() => {
+    try{
+const response = await axios.get("http://localhost:4000/users/allUsers")
+console.log(response)
+    }catch(error){
+console.log(error)
+    }
+  }
+  useEffect(() => {
+    allUsers()
+  },[])
     return(
         <div className="block">
         <div className="w-9 h-9 relative rounded-full">

@@ -1,11 +1,4 @@
-type Food = {
-    _id: string;
-    foodName: string;
-    price: string;
-    ingerdiets: string; // Fixed typo
-    image: string;
-    category: string;
-  };
+
   
   export const SelectedCategories = ({ food }: { food: Food }) => {
     return(
@@ -15,8 +8,8 @@ type Food = {
       >
         <img
           className="w-[238.75px] h-[129px] gap-10 rounded-xl"
-          src={food.image}
-          alt={food.foodName}
+          src={food.image as string}
+          alt={food.foodName as string}
         />
         <div className="self-stretch inline-flex flex-col justify-start items-start gap-2">
           <div className="self-stretch inline-flex justify-center items-center gap-2.5">

@@ -30,17 +30,17 @@ type NavigationProps = {
 
 ///
 type Category = {
-  _id: string;
-  cateryName: string;
+  _id: string | null;
+  cateryName: string | null;
 };
 
 type Food = {
-  _id: string;
-  foodName: string;
-  price: string;
-  ingerdiets: string;
-  image: string;
-  category: string;
+  _id: string | null;
+  foodName: string | null;
+  price: string | null;
+  ingerdiets: string | null;
+  image: string | null;
+  category: string | null;
 };
 
 type Dish = {

@@ -62,7 +62,9 @@ import {
    
     return (
       <div className="w-full h-full ml-[-205px] fixed bg-black/25 flex justify-center items-center">
-        <div className="w-[500px] h-[300px] rounded-[5px] bg-white p-[25px]">
+        <div className="w-[500px] h-[300px] rounded-[5px] bg-white p-[25px]
+        ">
+          
           <div className="w-full h-[50px] flex justify-between">
             <div className="text-[20px] font-bold">Add new category</div>
             <div

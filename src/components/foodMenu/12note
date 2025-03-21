@@ -343,3 +343,48 @@ export const ProductList = () => {
     </>
   );
 }; */
+
+
+
+
+/*   const formik = useFormik({
+    initialValues: {
+      foodName: "",
+      ingredients: "",
+      price: "",
+      category: "",
+      image: "",
+    },
+    validationSchema: foodSchema,
+    onSubmit: async (values) => {
+      console.log("ca", values);
+      try {
+        setLoading(false);
+        if (data) {
+          await UploadCloudiinary();
+        }
+        const response = await fetch("http://localhost:4000/food/add", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            foodName: values.foodName,
+            price: values.price,
+            ingerdiets: values.ingredients,
+            image: formik.values.image,
+            category: values.category,
+          }),
+        });
+        getFoods();
+        const result = await response.json();
+        console.log("Dish added successfully:", result);
+        formik.resetForm();
+        setLoading(true);
+      } catch (error) {
+        console.error("Error adding dish:", error);
+      }
+    },
+  }); */
+
+
