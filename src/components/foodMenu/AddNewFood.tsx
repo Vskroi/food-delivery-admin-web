@@ -26,16 +26,18 @@ type AddNewFoodProps = {
 export const AddNewFood: React.FC<AddNewFoodProps> = ({
   NewFoodCategoryId,
   getFoods,
+  
 }) => {
+  console.log("NewFoodCategoryId" , NewFoodCategoryId)
   const [addFood, setAddFood] = useState<Food>({
     _id: null,
     foodName: null,
     price: null,
-    ingerdiets:null,
+    ingerdiets: null,
     image: null,
     category: null,
   });
-  console.log("NewFoodCategoryId" , NewFoodCategoryId)
+console.log(addFood)
   const [data, setData] = useState<File | null>(null);
   const [previewImg, setPreviewImg] = useState<string | undefined>();
 
@@ -43,13 +45,15 @@ export const AddNewFood: React.FC<AddNewFoodProps> = ({
     const files = e?.target?.files;
     if (!files) return;
     const file = files[0];
-    console.log(file);
+
     setData(file);
 
     const reader = new FileReader();
     reader.onload = () => {
       setPreviewImg(reader.result as string);
+      console.log(reader);
     };
+
     reader.readAsDataURL(file);
   };
   const AddNewFoods = async () => {
@@ -93,29 +97,29 @@ export const AddNewFood: React.FC<AddNewFoodProps> = ({
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(response);
+      console.log(response, "asd");
 
       setAddFood((prev) => ({ ...prev, image: response.data.secure_url }));
-   
+
       setTimeout(() => {
         AddNewFoods();
-      }, 3467);
+      }, 6467);
     } catch (error) {
       console.log(error);
     }
   };
 
   const addnewFoodCategory = (id: string) => {
-    setAddFood((prev) => ({...prev , category : id}));
+    setAddFood((prev) => ({ ...prev, category: id }));
   };
 
   const onFoodNameChange = (e: event) => {
     setAddFood((prev) => ({ ...prev, foodName: e.target.value }));
   };
 
-  const onFoodPriceChange = (e: event) => {
-    setAddFood((prev) => ({ ...prev, price: e.target.value }));
-  };
+const onFoodPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setAddFood((prev) => ({ ...prev, price: Number(e.target.value) }));
+};
 
   const onIngredientsChange = (e: event) => {
     setAddFood((prev) => ({ ...prev, ingerdiets: e.target.value }));
@@ -123,7 +127,9 @@ export const AddNewFood: React.FC<AddNewFoodProps> = ({
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger onClick={() => addnewFoodCategory(NewFoodCategoryId as string)}>
+      <AlertDialogTrigger
+        onClick={() => addnewFoodCategory(NewFoodCategoryId as string)}
+      >
         <div className="w-[270px] h-[241px] px-4 py-2 border border-dashed border-red-500 rounded-[20px] flex flex-col justify-center items-center gap-6">
           <div className="flex justify-center items-center w-9 h-9 bg-red-500 rounded-full">
             <Plus stroke="white" />
@@ -142,7 +148,6 @@ export const AddNewFood: React.FC<AddNewFoodProps> = ({
           <AlertDialogDescription className="text-black"></AlertDialogDescription>
         </AlertDialogHeader>
 
-      
         <div className="flex gap-5">
           <div>
             <p className="text-sm font-medium">Food Name</p>
@@ -155,6 +160,7 @@ export const AddNewFood: React.FC<AddNewFoodProps> = ({
           <div>
             <p className="text-sm font-medium">Food Price</p>
             <Input
+              type="number"
               onChange={onFoodPriceChange}
               name="price"
               placeholder="Type price..."
@@ -171,7 +177,6 @@ export const AddNewFood: React.FC<AddNewFoodProps> = ({
           />
         </div>
 
-    
         <div>
           <p className="text-sm font-medium">Food Image</p>
           <label

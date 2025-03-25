@@ -4,14 +4,17 @@ import axios from "axios";
 
 import { AddNewFood } from "./AddNewFood";
 import { SelectedCategories } from "./SelectedCategories";
+import { useRouter } from "next/navigation";
 
 export const ProductList = () => {
+  const searchParams = useSearchParams();
+    const router = useRouter();
+    
+
   const [catery, setCatery] = useState<Cat>({
     name: "",
     _id: "",
   });
-
-  const searchParams = useSearchParams();
   const [categories, setCategories] = useState<Category[]>([]);
   const [allFoods, setAllFoods] = useState<Food[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,19 +30,18 @@ export const ProductList = () => {
     }
   };
 
-  const getFoods = async () => {
+  const getFoods = async (_id: string | null) => {
     try {
       setLoading(false);
-      const Alldish = categories.find(
-        (category) => category._id === catery._id
-      );
+const AllDish = _id ===  "AllDish"
 
-      if (!Alldish) {
+
+      if (AllDish) {
         const response = await axios.get("http://localhost:4000/food/allfoods");
         setAllFoods(response.data.data);
       } else {
         const response = await axios.get(
-          `http://localhost:4000/food/category/${catery._id}`
+          `http://localhost:4000/food/category/${_id}`
         );
         if (response) {
           setAllFoods(response.data.data);
@@ -59,20 +61,25 @@ export const ProductList = () => {
 
   useEffect(() => {
     const selectedCategory = searchParams.get("cateryName");
+    console.log("selectedCategory" , selectedCategory)
     setCatery((prev) => ({ ...prev, _id: selectedCategory || "" }));
     const cateryName = categories.find((a) => a._id === selectedCategory);
+   console.log('cateryName' , cateryName)
     if (cateryName) {
       setCatery((prev) => ({ ...prev, name: cateryName.cateryName || "" }));
+      getFoods(cateryName._id as string);
     } else {
       setCatery((prev) => ({ ...prev, name: "AllDish" }));
+      getFoods("AllDish");
     }
-
-    getFoods();
   }, [searchParams]);
 
   useEffect(() => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("cateryName", "AllDish");
+    router.push(`?${params.toString()}`);
     category();
-    getFoods();
+    getFoods("AllDish");
   }, []);
 
   return (
@@ -85,14 +92,14 @@ export const ProductList = () => {
           >
             <p>{cat.cateryName}</p>
             <div className="grid gap-8 grid-cols-4">
-              <AddNewFood NewFoodCategoryId={cat._id} getFoods={getFoods} />
+              <AddNewFood NewFoodCategoryId={cat._id} getFoods={() => getFoods} />
               {allFoods.filter((f) => f.category === cat._id).length > 0 ? (
                 allFoods
                   .filter((f) => f.category === cat._id)
                   .map((food) => (
                     <div key={food._id}>
-                      {" "}
-                      <SelectedCategories food={food} />{" "}
+                      
+                      <SelectedCategories food={food}/>
                     </div>
                   ))
               ) : (
@@ -104,8 +111,10 @@ export const ProductList = () => {
       ) : (
         <div className="w-[1150px] p-6 bg-white rounded-xl inline-flex flex-col justify-start items-start gap-4 overflow-hidden relative left-12 mt-12">
           <p>{catery.name}</p>
-          <div className="grid gap-8 wrap grid-cols-4">
-            <AddNewFood NewFoodCategoryId={catery._id} getFoods={getFoods} />
+          <div key={catery.name || "default-key"}
+className="grid gap-8 grid-cols-4">
+
+            <AddNewFood NewFoodCategoryId={catery._id} getFoods={() => getFoods} />
 
             {allFoods && allFoods.length > 0 ? (
               allFoods.map((food) => (

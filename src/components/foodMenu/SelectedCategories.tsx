@@ -3,7 +3,7 @@
   export const SelectedCategories = ({ food }: { food: Food }) => {
     return(
         <div
-        key={food._id}
+      
         className="w-[270.75px] h-[241px] rounded-[22px] border-[1px] bg-white border-[#E4E4E7] p-4"
       >
         <img
