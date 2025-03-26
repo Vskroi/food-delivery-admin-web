@@ -35,7 +35,7 @@ type Category = {
 };
 
 type Food = {
-  _id: string | null;
+  _id?: string | null;
   foodName: string | null;
   price: number | null;
   ingerdiets: string | null;
