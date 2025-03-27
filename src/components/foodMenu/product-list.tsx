@@ -43,26 +43,26 @@ export const ProductList = () => {
         );
         if (response) {
           setAllFoods(response.data.data);
-          console.log("1");
+     
         } else {
           setAllFoods([]);
-          console.log("2");
+       
         }
       }
       setLoading(true);
     } catch (error) {
       console.log(error);
       setAllFoods([]);
-      console.log("2");
+  
     }
   };
 
   useEffect(() => {
     const selectedCategory = searchParams.get("cateryName");
-    console.log("selectedCategory", selectedCategory);
+  
     setCatery((prev) => ({ ...prev, _id: selectedCategory || "" }));
     const cateryName = categories.find((a) => a._id === selectedCategory);
-    console.log("cateryName", cateryName);
+   
     if (cateryName) {
       setCatery((prev) => ({ ...prev, name: cateryName.cateryName || "" }));
       getFoods(cateryName._id as string);

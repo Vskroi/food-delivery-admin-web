@@ -26,9 +26,7 @@ type AddNewFoodProps = {
 export const AddNewFood: React.FC<AddNewFoodProps> = ({
   NewFoodCategoryId,
   getFoods,
-  
 }) => {
-  console.log("NewFoodCategoryId" , NewFoodCategoryId)
   const [addFood, setAddFood] = useState<Food>({
     _id: null,
     foodName: null,
@@ -37,7 +35,8 @@ export const AddNewFood: React.FC<AddNewFoodProps> = ({
     image: null,
     category: null,
   });
-console.log(addFood)
+  console.table(addFood);
+
   const [data, setData] = useState<File | null>(null);
   const [previewImg, setPreviewImg] = useState<string | undefined>();
 
@@ -51,32 +50,33 @@ console.log(addFood)
     const reader = new FileReader();
     reader.onload = () => {
       setPreviewImg(reader.result as string);
-      console.log(reader);
     };
 
     reader.readAsDataURL(file);
   };
   const AddNewFoods = async () => {
     try {
-      if (data) {
-        await UploadCloudiinary();
-      }
-      const response = await fetch("http://localhost:4000/food/add", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          foodName: addFood.foodName,
-          price: addFood.price,
-          ingerdiets: addFood.ingerdiets,
-          image: addFood.image,
-          category: addFood.category,
-        }),
-      });
+      await UploadCloudiinary();
+      setTimeout(async () => {
+        const response = await fetch("http://localhost:4000/food/add", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            foodName: addFood.foodName,
+            price: addFood.price,
+            ingerdiets: addFood.ingerdiets,
+            image: addFood.image,
+            category: addFood.category,
+          }),
+        });
+
+        const result = await response.json();
+        console.log(result);
+      }, 4000);
+
       getFoods();
-      const result = await response.json();
-      console.log("Dish added successfully:", result);
     } catch (error) {
       console.error("Error adding dish:", error);
     }
@@ -97,13 +97,8 @@ console.log(addFood)
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(response, "asd");
 
       setAddFood((prev) => ({ ...prev, image: response.data.secure_url }));
-
-      setTimeout(() => {
-        AddNewFoods();
-      }, 6467);
     } catch (error) {
       console.log(error);
     }
@@ -117,9 +112,9 @@ console.log(addFood)
     setAddFood((prev) => ({ ...prev, foodName: e.target.value }));
   };
 
-const onFoodPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  setAddFood((prev) => ({ ...prev, price: Number(e.target.value) }));
-};
+  const onFoodPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAddFood((prev) => ({ ...prev, price: Number(e.target.value) }));
+  };
 
   const onIngredientsChange = (e: event) => {
     setAddFood((prev) => ({ ...prev, ingerdiets: e.target.value }));
