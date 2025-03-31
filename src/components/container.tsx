@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Orders } from "./orders/orders";
 import { FoodMenu } from "./foodMenu/food-menu";
@@ -12,13 +13,14 @@ export const Container: React.FC<ContainerProps> = ({ selected }) => {
   
   return (
     <>
-      {selected === "Orders" ? (
+    {/*   {selected === "Orders" ? (
         <Orders />
       ) : selected === "FoodMenu" ? (
         <FoodMenu />
       ) : selected === "Settings" ? (
         <Settings />
-      ) : null}
+      ) : null} */}
+      <Orders></Orders>
     </>
   );
 };

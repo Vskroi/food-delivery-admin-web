@@ -1,3 +1,4 @@
+"use client"
 import { createContext, useContext, useEffect, useState } from "react";
 type UserContextType = {
   email: string | undefined;
@@ -16,7 +17,7 @@ if (!window) {
 }
 return (
     <UserContext.Provider value={{email: user?.email , role: user?.role }}>
-        {user ? children : <div>... loading</div>}
+  {children}
     </UserContext.Provider>
 )
 };

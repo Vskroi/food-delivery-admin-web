@@ -35,7 +35,7 @@ export const AddNewFood: React.FC<AddNewFoodProps> = ({
     image: null,
     category: null,
   });
-  console.table(addFood);
+
 
   const [data, setData] = useState<File | null>(null);
   const [previewImg, setPreviewImg] = useState<string | undefined>();

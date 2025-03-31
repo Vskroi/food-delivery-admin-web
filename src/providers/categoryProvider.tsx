@@ -1,26 +1,46 @@
+"use client"
+import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
-type CategoryContextType = {
-  cateryName: string | undefined;
-  _id: string | undefined;
+
+type Category = {
+  cateryName: string;
+  _id: string;
 };
+
+type CategoryContextType = {
+  categories: Category[];
+  refetch: () => Promise<void>;
+};
+
 const CategoryContext = createContext<CategoryContextType | undefined>(undefined);
+
 export const CategoryProvider = ({ children }: { children: React.ReactNode }) => {
-  const [category, setcategory] = useState<CategoryContextType | undefined>(undefined);
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("http://localhost:4000/categories");
+      setCategories(response.data.data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+
   useEffect(() => {
-    const category = localStorage.getItem("category");
-    setcategory(JSON.parse(category || "{}"));
+    fetchData();
   }, []);
 
-if (!window) {
-  return <div>hello</div>;
-}
-return (
-    <CategoryContext.Provider value={{cateryName: category?.cateryName , _id: category?._id }}>
-        {category ? children : <div>... loading</div>}
+  return (
+    <CategoryContext.Provider value={{ categories, refetch: fetchData }}>
+      {categories.length > 0 ? children : <div>Loading...</div>}
     </CategoryContext.Provider>
-)
+  );
 };
+
 export const useCategory = () => {
-    const context = useContext(CategoryContext)
-    return context
-}
+  const context = useContext(CategoryContext);
+  if (!context) {
+    throw new Error("useCategory must be used within a CategoryProvider");
+  }
+  return context;
+};

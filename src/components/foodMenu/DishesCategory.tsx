@@ -16,28 +16,22 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-
+import { useCategory } from "@/providers/categoryProvider";
 export const DishesCategory = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [categories, setCategories] = useState<Category[]>([]);
+ /*  const [categories, setCategories] = useState<Category[]>([]); */
   const [addCategory, setAddCategory] = useState<Category>({
     cateryName: null,
     _id: null,
   });
+  const { categories, refetch } = useCategory();
+
   const [selectedCategory, setSelectedCategory] = useState<
     string | undefined | null
   >("AllDishes");
 
-  const category = async () => {
-    try {
-      const response = await axios.get("http://localhost:4000/categories");
-      const data = response.data.data;
-      setCategories(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+ 
   const AddNewCategory = async () => {
     try {
       await fetch("http://localhost:4000/categories", {
@@ -47,7 +41,7 @@ export const DishesCategory = () => {
         },
         body: JSON.stringify({ cateryName: addCategory.cateryName }),
       });
-      category();
+      refetch();
     } catch (error) {
       console.log(error);
     }
@@ -71,7 +65,7 @@ export const DishesCategory = () => {
   };
 
   useEffect(() => {
-    category();
+    refetch();
   }, []);
 
   return (

@@ -1,3 +1,5 @@
+'use client'
+
 import { ChevronLeft } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
