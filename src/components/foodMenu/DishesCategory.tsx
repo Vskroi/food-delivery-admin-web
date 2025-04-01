@@ -79,22 +79,22 @@ export const DishesCategory = () => {
             <div className="flex flex-wrap w-[1100px] gap-3">
               <div className="inline-flex justify-start items-center gap-3 flex-wrap content-center overflow-hidden">
                 <div
-                  className={`h-9 px-4 py-2 bg-background-bg-background rounded-full border-[1px] flex justify-start items-center gap-2
+                  className={`h-9 px-4 py-2 cursor-pointer bg-background-bg-background rounded-full border-[1px] flex justify-start items-center gap-2
         ${
           selectedCategory === "AllDishes" ? "border-red-600" : "border-black"
         }`}
                   onClick={() => setSelected("AllDishes")}
                 >
-                  <p>All Dishes</p>
+                  <p className="cursor-pointer">All Dishes</p>
                 </div>
               </div>
               {categories.map((category) => (
                 <div
                   key={category._id}
-                  className="inline-flex justify-start items-center gap-3 flex-wrap content-center overflow-hidden"
+                  className="inline-flex cursor-pointer justify-start items-center gap-3 flex-wrap content-center overflow-hidden"
                 >
                   <div
-                    className={`h-9 px-4 py-2 bg-background-bg-background rounded-full border-[1px] flex justify-start items-center gap-2
+                    className={`h-9 px-4 py-2 cursor-pointer bg-background-bg-background rounded-full border-[1px] flex justify-start items-center gap-2
         ${
           selectedCategory === category.cateryName!
             ? "border-red-600"
@@ -102,7 +102,7 @@ export const DishesCategory = () => {
         }`}
                     onClick={() => setSelected(category._id!)}
                   >
-                    <p>{category.cateryName}</p>
+                    <p className="cursor-pointer">{category.cateryName}</p>
                   </div>
                 </div>
               ))}
