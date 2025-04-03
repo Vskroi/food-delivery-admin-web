@@ -13,6 +13,7 @@ import { Image, Plus } from "lucide-react";
 import { Input } from "../ui/input";
 import { ChangeEvent, useState } from "react";
 import axios from "axios";
+
 const NEXT_PUBLIC_CLOUDINARY_API_KEY = "449676792634373";
 const CLOUDINARY_UPLOAD_PRESET = "H8ahs3";
 const CLOUDINARY_CLOUD_NAME = "dwauz9le4";
@@ -36,7 +37,6 @@ export const AddNewFood: React.FC<AddNewFoodProps> = ({
     category: null,
   });
 
-
   const [data, setData] = useState<File | null>(null);
   const [previewImg, setPreviewImg] = useState<string | undefined>();
 
@@ -54,38 +54,44 @@ export const AddNewFood: React.FC<AddNewFoodProps> = ({
 
     reader.readAsDataURL(file);
   };
-  const AddNewFoods = async () => {
-    try {
-      await UploadCloudiinary();
-      setTimeout(async () => {
-        const response = await fetch("http://localhost:4000/food/add", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            foodName: addFood.foodName,
-            price: addFood.price,
-            ingerdiets: addFood.ingerdiets,
-            image: addFood.image,
-            category: addFood.category,
-          }),
-        });
 
-        const result = await response.json();
-        console.log(result);
-      }, 4000);
+  const AddNewFoods = async (image : string) => {
+    try {
+      const response = await fetch("http://localhost:4000/food/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          foodName: addFood.foodName,
+          price: addFood.price,
+          ingerdiets: addFood.ingerdiets,
+          image: image,
+          category: addFood.category,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert(`${addFood.foodName} added successfully`);
+      } else {
+        alert("Error adding food.");
+      }
 
       getFoods();
     } catch (error) {
       console.error("Error adding dish:", error);
+      alert("An error occurred while adding the food.");
     }
   };
+
   const UploadCloudiinary = async () => {
     if (!data) {
-      alert("Please insert photo");
+      alert("Please insert a photo");
       return;
     }
+
     try {
       const file = new FormData();
       file.append("file", data as File);
@@ -98,9 +104,17 @@ export const AddNewFood: React.FC<AddNewFoodProps> = ({
         },
       });
 
-      setAddFood((prev) => ({ ...prev, image: response.data.secure_url }));
+
+      
+
+
+
+    
+      AddNewFoods(response.data.secure_url as string);
+   
     } catch (error) {
-      console.log(error);
+      console.log("Error uploading to Cloudinary:", error);
+      alert("Failed to upload image.");
     }
   };
 
@@ -108,7 +122,7 @@ export const AddNewFood: React.FC<AddNewFoodProps> = ({
     setAddFood((prev) => ({ ...prev, category: id }));
   };
 
-  const onFoodNameChange = (e: event) => {
+  const onFoodNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAddFood((prev) => ({ ...prev, foodName: e.target.value }));
   };
 
@@ -116,7 +130,7 @@ export const AddNewFood: React.FC<AddNewFoodProps> = ({
     setAddFood((prev) => ({ ...prev, price: Number(e.target.value) }));
   };
 
-  const onIngredientsChange = (e: event) => {
+  const onIngredientsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAddFood((prev) => ({ ...prev, ingerdiets: e.target.value }));
   };
 
@@ -207,7 +221,7 @@ export const AddNewFood: React.FC<AddNewFoodProps> = ({
 
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={AddNewFoods}>Add Dish</AlertDialogAction>
+          <AlertDialogAction onClick={UploadCloudiinary}>Add Dish</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

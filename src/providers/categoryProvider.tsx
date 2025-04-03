@@ -32,7 +32,7 @@ export const CategoryProvider = ({ children }: { children: React.ReactNode }) =>
 
   return (
     <CategoryContext.Provider value={{ categories, refetch: fetchData }}>
-      {categories.length > 0 ? children : <div>Loading...</div>}
+      {children }
     </CategoryContext.Provider>
   );
 };

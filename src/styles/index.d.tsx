@@ -55,3 +55,12 @@ type Cat = {
   name?: string;
   _id: string | null;
 };
+type UserContextType = {
+  data: {
+    email: string;
+    _id: string;
+    role: string;
+  };
+  exp: number;
+  iat: number;
+} | undefined;

@@ -71,9 +71,18 @@ export const UpdateFood = ({ food }: { food: Food }) => {
       });
 
       const result = await response.json();
+      if(result.success){
+        alert("Food deleted successfully");
+      }else{
+  alert("already deleted")
+      }
+  
+ 
+     
     } catch (error) {
       console.error("Error adding dish:", error);
     }
+
   };
 
   const UploadCloudiinary = async () => {
@@ -113,7 +122,8 @@ export const UpdateFood = ({ food }: { food: Food }) => {
       });
 
       const result = await response.json();
-      console.log("Dish added successfully:", result);
+      
+      alert("Food updated successfully");
     } catch (error) {
       console.error("Error adding dish:", error);
     }

@@ -1,17 +1,22 @@
-'use client'
+"use client";
 
 import { ChevronLeft } from "lucide-react";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
 import { useEffect, useState } from "react";
-
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { object, string } from "yup";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import exp from "constants";
 
 interface LoginProps {
-  nextStep: (isAdmin: boolean) => void;
+  nextStep: (user: boolean) => void;
 }
 
-export const Login = ({ nextStep }: LoginProps) => {
+ const Login = () => {
+  const usePramas = useParams()
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [loginValue, setLoginValue] = useState<{
     email: string;
     password: string;
@@ -34,32 +39,26 @@ export const Login = ({ nextStep }: LoginProps) => {
     setError(null);
 
     try {
-      console.log("Sending request with values:", loginValue);
+      await userSchema.validate(loginValue); 
 
-      const response = await fetch(
-        "http://localhost:4000/user/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(loginValue),
-        }
-      );
+      const response = await fetch("http://localhost:4000/user/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(loginValue),
+      });
 
-      const responseData = await response.json(); 
-
-      console.log(responseData);
+      const responseData = await response.json();
 
       if (responseData.success) {
-        console.log("Login successful:", responseData.message);
-        nextStep(true); 
+        localStorage.setItem("token", responseData.data);
+        router.push(`admin`);
       } else {
         setError(responseData.message);
       }
     } catch (err) {
-      console.error("Login error:", err);
-      setError("An error occurred during login.");
+    
     } finally {
       setLoading(false);
     }
@@ -69,13 +68,13 @@ export const Login = ({ nextStep }: LoginProps) => {
     setLoginValue((prev) => ({ ...prev, email: e.target.value }));
   };
 
-  const onPasswordValueChange = (e : event) => {
+  const onPasswordValueChange = (e: event) => {
     setLoginValue((prev) => ({ ...prev, password: e.target.value }));
   };
 
-  if (loading) {
+/*   if (loading) {
     return <div>Loading...</div>;
-  }
+  } */
 
   return (
     <div className="w-full flex w-full justify-center items-center">
@@ -109,6 +108,12 @@ export const Login = ({ nextStep }: LoginProps) => {
         <Button onClick={handleSubmit} className="w-[336px]">
           Let's Go
         </Button>
+        <div className="flex gap-2">
+       <p>Don’t have an account? </p> <Link className=" text-[#2563EB]" href={`/sign-up/email`}>
+          {" "}
+            Sign up 
+        </Link>
+        </div>
       </div>
       <div className="w-[856px] h-[904px] relative mt-10">
         <img
@@ -119,3 +124,4 @@ export const Login = ({ nextStep }: LoginProps) => {
     </div>
   );
 };
+export default Login

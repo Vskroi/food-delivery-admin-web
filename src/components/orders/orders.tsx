@@ -74,14 +74,8 @@ export const Orders = () => {
   }
 
   return (
-    <div className="block">
-      <div className="w-9 h-9 relative rounded-full">
-        <img
-          className="w-9 h-9 rounded-full"
-          src={'default-image-url'}
-          alt="User Avatar"
-        />
-      </div>
+    <div className="block p-10">
+     
       <div className="border-[2px] rounded-md w-[1171px] ">
         <div className="self-stretch p-4 border-b border-border-border-border inline-flex justify-between items-center">
           <div className="w-[485.20px] inline-flex flex-col justify-start items-start">
